@@ -1,0 +1,7 @@
+
+Check existing certificates on the file
+
+
+Enum version resources in all languages. Pick language from existing res: done
+
+Add switch to remove all vers resources and certs?
