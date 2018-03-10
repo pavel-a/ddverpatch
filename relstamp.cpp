@@ -44,7 +44,7 @@ struct ResDesc
 		: m_data((PUCHAR)data), m_cbdata(cbData), m_type(typeId), 
 			m_name(name_id), m_language(langId)	{}
 
-	friend bool addResourceFromFile( PCTSTR resfile, UINT32 id_flags );
+	friend bool addResourceFromFile( PCTSTR resfile, UINT32 id_flags, LANGID langid );
 };
 
 static 
@@ -683,7 +683,7 @@ bool cmd_params::cmd_arg_parse( int argc, _TCHAR *argv[], PCTSTR *fname,
 
 				ap = argv[++i];	ASSERT( ap && *ap != _T('/') && *ap != _T('-') );
 				// only during 2nd pass:
-				if ( !firstPass && !addResourceFromFile( ap, res_id ) ) {
+				if ( !firstPass && !addResourceFromFile( ap, res_id, g_params.LangId ) ) {
 					dtprint(_T("Error adding resource file [%s] id=%#X\n"), ap, res_id);
 					return false;
 				}
@@ -819,7 +819,7 @@ bool argmatch(PCTSTR sw, PCTSTR cmp )
 // Add raw binary resource from file.
 // Low 16 bit of id_flags = resource ID. Bitmask FF0000 = type (0=RCDATA). High byte reserved.
 //////////////////////////////////////////////////////////////////////////
-bool addResourceFromFile( PCTSTR resfile, UINT32 id_flags )
+bool addResourceFromFile( PCTSTR resfile, UINT32 id_flags, LANGID langid )
 {
 	UINT64 xFileSize;
 	HANDLE fh = CreateFile(resfile, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, NULL);
@@ -860,7 +860,7 @@ bool addResourceFromFile( PCTSTR resfile, UINT32 id_flags )
 	ULONG restype = (id_flags >> 16) & 0xFF;
 	if ( 0 == restype ) restype = (ULONG)RT_RCDATA;
 
-	addUpdRes( new ResDesc( dp, dwFileSize, restype, id_flags & 0xFFFF ) );
+	addUpdRes( new ResDesc( dp, dwFileSize, restype, id_flags & 0xFFFF, langid ) );
 
 	return true;	
 }

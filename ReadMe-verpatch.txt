@@ -41,7 +41,7 @@ Other options:
 
 /fn - preserves Original filename, Internal name in the existing version resource of the file.
 /langid <number> - language id for new version resource.
-     Use with /va. Default is Language Neutral.
+     Use with /va or /rf. Default is Language Neutral.
      <number> is combination of primary and sublanguage IDs. ENU is 1033 or 0x409.
 /vo - outputs the version info in RC format to stdout.
      This can be used with /xi to dump a version resource without modification.
@@ -98,7 +98,9 @@ Low 16 bits of this value are resource id; can not be 0.
 Next 8 bits are resource type: one of RT_xxx symbols in winuser.h, or user defined.
 If the type value is 0, RT_RCDATA (10) is assumed.
 High 8 bits of the #id arg are reserved0.
-The language code of resources added by this switch is 0 (Neutral).
+The language code of resources added by this switch is 0 (Neutral) by default, and you
+can change it using the /langid option. For example, specify /langid 0x409 along with
+/rf to add/modify ENU resources.
 Named resource types and ids are not implemented.
 The file is added as opaque binary chunk; the resource size is rounded up to 4 bytes
 and padded with zero bytes.
